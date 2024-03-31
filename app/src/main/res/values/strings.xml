@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Rahma_khlifa_Mesure_Glycemie</string>
+    <string name="text">Mesure de niveau de \n Glycémie</string>
+    <string name="tvAgeText">Votre Age</string>
+    <string name="jeuntext">Est ce que vous jeunez</string>
+    <string name="textOui">oui\n</string>
+    <string name="textNon">non\n</string>
+</resources>
