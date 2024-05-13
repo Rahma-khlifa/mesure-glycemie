@@ -1,6 +1,9 @@
 package com.example.rahma_khlifa_mesure_glycemie.vue;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,17 +14,19 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rahma_khlifa_mesure_glycemie.ConsultActivity;
 import com.example.rahma_khlifa_mesure_glycemie.R;
 import com.example.rahma_khlifa_mesure_glycemie.contoller.Controller;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView tvAge, tvReponse;
+    private TextView tvAge;
     private SeekBar sbAge;
     private RadioButton rbIsFasting, rbIsNotFasting;
     private Button btnConsulter;
     private EditText etValeur;
     private Controller controller;
-
+    private  final String RESPONSE_KEY="result";
+    private final int REQUEST_CODE=1;//Code de consult Activity
     private void init()
     {
         controller = Controller.getInstance();
@@ -31,7 +36,16 @@ public class MainActivity extends AppCompatActivity {
         rbIsNotFasting = findViewById(R.id.rbtNon);
         btnConsulter = findViewById(R.id.btnConsulter);
         etValeur = findViewById(R.id.etValeur);
-        tvReponse = findViewById(R.id.tvReponse);
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==REQUEST_CODE)
+            if (resultCode==RESULT_CANCELED)
+                Toast.makeText(MainActivity.this,"ERROR:RESULT_CANCELED",Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -78,7 +92,10 @@ public class MainActivity extends AppCompatActivity {
                     controller.createPatient(age, valeur, rbIsFasting.isChecked());
 
                     //Flèche "Notify" Controller --> view
-                    tvReponse.setText(controller.getResult());
+                   // tvReponse.setText(controller.getResult());
+                    Intent intent=new Intent(MainActivity.this, ConsultActivity.class);
+                    intent.putExtra(RESPONSE_KEY, Controller.getInstance().getResult());
+                    startActivityForResult(intent,REQUEST_CODE);
                 }
             }
         });
